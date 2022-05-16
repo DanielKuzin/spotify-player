@@ -60,8 +60,7 @@ export default function Dashboard({ code }) {
         }
         shuffleArray(tracksLeftToPlay);
         setAlbumTracksLeftToPlay(tracksLeftToPlay);
-        addTracksToPoll(tracksLeftToPlay.slice(0, 4));
-        chooseTrack(nextTrack);
+        addTracksToPollAndPlayTrack(nextTrack, tracksLeftToPlay.slice(0, 4));
       },
       (error) => {
         console.log(error);
@@ -69,39 +68,25 @@ export default function Dashboard({ code }) {
     );
   }
 
-  function addTracksToPoll(tracks) {
+  function addTracksToPollAndPlayTrack(trackToPlay, tracksToAddToPoll) {
+    setPlayingTrack(trackToPlay);
+    setSearch("");
     axios
       .put("https://627b91cfb54fe6ee008a6235.mockapi.io/data/1", {
-        song1Name: tracks[0].name || "",
-        song1Artist: tracks[0].artists[0].name,
-        song2Name: tracks[1].name,
-        song2Artist: tracks[1].artists[0].name,
-        song3Name: tracks[2].name,
-        song3Artist: tracks[2].artists[0].name,
-        song4Name: tracks[3].name,
-        song4Artist: tracks[3].artists[0].name,
+        playingSongName: trackToPlay.name,
+        playingSongArtist: trackToPlay.artists[0].name,
+        song1Name: tracksToAddToPoll[0].name || "",
+        song1Artist: tracksToAddToPoll[0].artists[0].name,
+        song2Name: tracksToAddToPoll[1].name,
+        song2Artist: tracksToAddToPoll[1].artists[0].name,
+        song3Name: tracksToAddToPoll[2].name,
+        song3Artist: tracksToAddToPoll[2].artists[0].name,
+        song4Name: tracksToAddToPoll[3].name,
+        song4Artist: tracksToAddToPoll[3].artists[0].name,
         song1Votes: 0,
         song2Votes: 0,
         song3Votes: 0,
         song4Votes: 0,
-      })
-      .then(
-        (response) => {
-          // console.log(response);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-  }
-
-  function chooseTrack(track) {
-    setPlayingTrack(track);
-    setSearch("");
-    axios
-      .put("https://627b91cfb54fe6ee008a6235.mockapi.io/data/1", {
-        playingSongName: track.name,
-        playingSongArtist: track.artists[0].name,
       })
       .then(
         (response) => {
@@ -130,8 +115,10 @@ export default function Dashboard({ code }) {
         let trackToPlayNow = tracksLeftToPlay[0];
         tracksLeftToPlay.shift(); // remove trackToPlayNow
         setAlbumTracksLeftToPlay(tracksLeftToPlay);
-        addTracksToPoll(tracksLeftToPlay.slice(0, 4));
-        chooseTrack(trackToPlayNow);
+        addTracksToPollAndPlayTrack(
+          trackToPlayNow,
+          tracksLeftToPlay.slice(0, 4)
+        );
       });
   }
 
