@@ -9,7 +9,11 @@ export default function AlbumSearchResult({ album, chooseAlbum }) {
         chooseAlbum(album.id, album.albumImage, album.title);
       }}
     >
-      <img src={album.albumImage} style={{ height: "64px", width: "64px" }} />
+      <img
+        src={album.albumImage}
+        style={{ height: "64px", width: "64px" }}
+        alt=""
+      />
       <div className="ms-3">
         <div>{album.title}</div>
         <div className="text-muted">total tracks: {album.totalTracks}</div>

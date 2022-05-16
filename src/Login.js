@@ -6,8 +6,7 @@ const client_id = "1b92d625825c465aa3f2ec73e22162b5";
 const response_type = "code";
 const redirect_uri = "http://localhost:3000";
 const scope =
-  "streaming user-read-email user-read-private \
-  user-library-read user-library-modify user-read-playback-state user-modify-playback-state";
+  "streaming user-read-email user-read-private user-library-read user-library-modify user-read-playback-state user-modify-playback-state";
 
 const full_auth_url =
   auth_url +
