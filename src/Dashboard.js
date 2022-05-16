@@ -128,10 +128,10 @@ export default function Dashboard({ code }) {
         let tracksLeftToPlay = [...res.body.items];
         shuffleArray(tracksLeftToPlay);
         let trackToPlayNow = tracksLeftToPlay[0];
-        chooseTrack(trackToPlayNow);
         tracksLeftToPlay.shift(); // remove trackToPlayNow
         setAlbumTracksLeftToPlay(tracksLeftToPlay);
         addTracksToPoll(tracksLeftToPlay.slice(0, 4));
+        chooseTrack(trackToPlayNow);
       });
   }
 
