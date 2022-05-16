@@ -68,6 +68,24 @@ export default function Dashboard({ code }) {
     );
   }
 
+  function chooseTrack(track) {
+    setPlayingTrack(track);
+    setSearch("");
+    axios
+      .put("https://627b91cfb54fe6ee008a6235.mockapi.io/data/1", {
+        playingSongName: track.name,
+        playingSongArtist: track.artists[0].name,
+      })
+      .then(
+        (response) => {
+          // console.log(response);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }
+
   function addTracksToPollAndPlayTrack(trackToPlay, tracksToAddToPoll) {
     setPlayingTrack(trackToPlay);
     setSearch("");
