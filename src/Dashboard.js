@@ -113,26 +113,35 @@ export default function Dashboard({ code }) {
       );
   }
 
-  function chooseAlbum(albumID, albumImage, albumName) {
+  function chooseAlbum(albumID, albumImage, albumName, albumTotalTracks) {
     setPlayingAlbum({
       name: albumName,
       image: albumImage,
     });
     setSearch("");
-    spotifyApi
-      .getAlbumTracks(albumID, {
-        limit: 50,
-      })
-      .then((res) => {
-        setAllAlbumTracks(res.body.items);
-        let tracksLeftToPlay = [...res.body.items];
-        shuffleArray(tracksLeftToPlay);
-        let trackToPlayNow = tracksLeftToPlay[0];
-        chooseTrack(trackToPlayNow);
-        tracksLeftToPlay.shift(); // remove trackToPlayNow
-        setAlbumTracksLeftToPlay(tracksLeftToPlay);
-        addTracksToPoll(tracksLeftToPlay.slice(0, 4));
-      });
+    let iterations = Math.ceil(albumTotalTracks / 50);
+    let allTracksRecieved = [];
+
+    for (let i = 0; i < iterations; i++) {
+      spotifyApi
+        .getAlbumTracks(albumID, {
+          limit: 50,
+          offset: i * 50,
+        })
+        .then((res) => {
+          allTracksRecieved = allTracksRecieved.concat(res.body.items);
+          console.log(allTracksRecieved);
+        });
+    }
+
+    setAllAlbumTracks(allTracksRecieved);
+    let tracksLeftToPlay = [...allTracksRecieved];
+    shuffleArray(tracksLeftToPlay);
+    let trackToPlayNow = tracksLeftToPlay[0];
+    chooseTrack(trackToPlayNow);
+    tracksLeftToPlay.shift(); // remove trackToPlayNow
+    setAlbumTracksLeftToPlay(tracksLeftToPlay);
+    addTracksToPoll(tracksLeftToPlay.slice(0, 4));
   }
 
   // function searchTracks(cancel) {
