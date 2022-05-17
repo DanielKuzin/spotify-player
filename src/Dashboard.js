@@ -11,6 +11,9 @@ const spotifyApi = new SpotifyWebApi({
   clientId: "1b92d625825c465aa3f2ec73e22162b5",
 });
 
+// const serverUrl = "http://localhost:3001";
+const serverUrl = "https://dans-player-server.lm.r.appspot.com";
+
 export default function Dashboard({ code }) {
   const accessToken = useAuth(code);
   const [search, setSearch] = useState("");
@@ -27,6 +30,11 @@ export default function Dashboard({ code }) {
       array[i] = array[j];
       array[j] = temp;
     }
+  }
+
+  function clearVotedUsers() {
+    console.log("clear");
+    axios.delete(serverUrl + "/voted");
   }
 
   function chooseNextTrackFromPoll() {
@@ -114,6 +122,7 @@ export default function Dashboard({ code }) {
           console.log(error);
         }
       );
+    clearVotedUsers();
   }
 
   function chooseAlbum(albumID, albumImage, albumName) {
