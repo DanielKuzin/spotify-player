@@ -198,6 +198,7 @@ export default function Dashboard({ code }) {
                 albumImage: smallestAlbumImage.url,
                 totalTracks: album.total_tracks,
                 id: album.id,
+                artists: album.artists,
               };
             })
         );
