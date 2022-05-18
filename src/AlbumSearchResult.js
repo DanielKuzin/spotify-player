@@ -17,7 +17,7 @@ export default function AlbumSearchResult({ album, chooseAlbum }) {
       <div className="ms-3">
         <div>{album.title}</div>
         <div className="text-muted">total tracks: {album.totalTracks}</div>
-        <a>
+        <div>
           Artists:{" "}
           {album.artists.map((artist) => artist.name).join(", ").length > 50
             ? album.artists
@@ -26,7 +26,7 @@ export default function AlbumSearchResult({ album, chooseAlbum }) {
                 .slice(0, 50)
                 .concat("...")
             : album.artists.map((artist) => artist.name).join(", ")}
-        </a>
+        </div>
       </div>
     </div>
   );
