@@ -273,7 +273,7 @@ export default function Dashboard({ code }) {
     if (!search) return setSearchResults([]);
     if (!accessToken) return;
     let cancel = false;
-    if (!searchPlaylists && search != "") {
+    if (!searchPlaylists && search !== "") {
       searchAlbums(cancel);
     }
     return () => (cancel = true);
