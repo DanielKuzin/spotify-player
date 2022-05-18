@@ -47,7 +47,6 @@ export default function Dashboard({ code }) {
           limit: 50,
         })
         .then((res) => {
-          if (cancel) return;
           setSearchResults(
             res.body.items.map((playlist) => {
               const smallestPlaylistImage = playlist.images.reduce(
