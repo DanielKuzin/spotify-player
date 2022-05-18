@@ -77,7 +77,6 @@ export default function Dashboard({ code }) {
 
   function chooseTrack(track) {
     setPlayingTrack(track);
-    setSearch("");
     axios
       .put("https://627b91cfb54fe6ee008a6235.mockapi.io/data/1", {
         playingSongName: track.name,
@@ -124,28 +123,36 @@ export default function Dashboard({ code }) {
     clearVotedUsers();
   }
 
-  function chooseAlbum(albumID, albumImage, albumName) {
+  function chooseAlbum(albumID, albumImage, albumName, albumTotalTracks) {
     setPlayingAlbum({
       name: albumName,
       image: albumImage,
     });
     setSearch("");
-    spotifyApi
-      .getAlbumTracks(albumID, {
-        limit: 50,
-      })
-      .then((res) => {
-        setAllAlbumTracks(res.body.items);
-        let tracksLeftToPlay = [...res.body.items];
-        shuffleArray(tracksLeftToPlay);
-        let trackToPlayNow = tracksLeftToPlay[0];
-        tracksLeftToPlay.shift(); // remove trackToPlayNow
-        setAlbumTracksLeftToPlay(tracksLeftToPlay);
-        addTracksToPollAndPlayTrack(
-          trackToPlayNow,
-          tracksLeftToPlay.slice(0, 4)
-        );
-      });
+    let allTracks = [];
+    let iterations = Math.ceil(albumTotalTracks / 50);
+    for (let i = 0; i < iterations; i++) {
+      spotifyApi
+        .getAlbumTracks(albumID, {
+          limit: 50,
+        })
+        .then((res) => {
+          allTracks = allTracks.concat(res.body.items);
+          console.log("allTracks.length: " + allTracks.length);
+          if (i == iterations - 1) {
+            setAllAlbumTracks(allTracks);
+            let tracksLeftToPlay = [...allTracks];
+            shuffleArray(tracksLeftToPlay);
+            let trackToPlayNow = tracksLeftToPlay[0];
+            tracksLeftToPlay.shift(); // remove trackToPlayNow
+            setAlbumTracksLeftToPlay(tracksLeftToPlay);
+            addTracksToPollAndPlayTrack(
+              trackToPlayNow,
+              tracksLeftToPlay.slice(0, 4)
+            );
+          }
+        });
+    }
   }
 
   // function searchTracks(cancel) {
