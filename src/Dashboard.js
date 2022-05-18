@@ -131,8 +131,8 @@ export default function Dashboard({ code }) {
 
   function choosePlaylist(playlistID, playlistImage, playlistName) {
     setPlayingAlbum({
-      name: albumName,
-      image: albumImage,
+      name: playlistName,
+      image: playlistImage,
     });
     setSearch("");
     spotifyApi
@@ -290,7 +290,7 @@ export default function Dashboard({ code }) {
           onChange={(e) => setSearch(e.target.value)}
         />
         <button onClick={handleClick}>
-          {searchPlaylists ? "User Playlists" : "Albums"}
+          {searchPlaylists ? "Playlists" : "Albums"}
         </button>
       </div>
 
