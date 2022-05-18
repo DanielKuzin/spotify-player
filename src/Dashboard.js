@@ -38,7 +38,7 @@ export default function Dashboard({ code }) {
     axios.delete(serverUrl + "/voted");
   }
 
-  function handleClick() {
+  function handleSearchPlaylistsToggle() {
     setSearchResults([]);
     setSearch("");
     if (!searchPlaylists) {
@@ -165,13 +165,13 @@ export default function Dashboard({ code }) {
       image: playlistImage,
     });
     setSearch("");
+    setSearchResults([]);
     spotifyApi
       .getPlaylistTracks(playlistID, {
         limit: 100,
       })
       .then(
         (res) => {
-          console.log(res);
           let tracksRecieved = res.body.items.map((item) => item.track);
           setAllAlbumTracks(tracksRecieved);
           let tracksLeftToPlay = [...tracksRecieved];
@@ -295,7 +295,7 @@ export default function Dashboard({ code }) {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <button onClick={handleClick}>
+        <button onClick={handleSearchPlaylistsToggle}>
           {searchPlaylists ? "Playlists" : "Albums"}
         </button>
       </div>
@@ -316,11 +316,6 @@ export default function Dashboard({ code }) {
                 key={album.uri}
               />
             ))}
-        {searchResults.length === 0 && (
-          <div className="text-center" style={{ whiteSpace: "pre" }}>
-            {}
-          </div>
-        )}
       </div>
       {allAlbumTracks.length > 1 && playingTrack && (
         <h2 className="text-center" style={{ color: "purple" }}>
