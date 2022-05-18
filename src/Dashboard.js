@@ -39,9 +39,8 @@ export default function Dashboard({ code }) {
   }
 
   function handleClick() {
-    setSearchPlaylists(!searchPlaylists);
     setSearch("");
-    if (searchPlaylists) {
+    if (!searchPlaylists) {
       spotifyApi
         .getUserPlaylists({
           limit: 50,
@@ -69,6 +68,7 @@ export default function Dashboard({ code }) {
           );
         });
     }
+    setSearchPlaylists(!searchPlaylists);
   }
 
   function chooseNextTrackFromPoll() {
@@ -277,7 +277,7 @@ export default function Dashboard({ code }) {
       searchAlbums(cancel);
     }
     return () => (cancel = true);
-  }, [search, accessToken, searchPlaylists]);
+  }, [search, accessToken]);
 
   return (
     <Container
