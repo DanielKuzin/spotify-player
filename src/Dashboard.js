@@ -4,6 +4,7 @@ import { Container, Form } from "react-bootstrap";
 import SpotifyWebApi from "spotify-web-api-node";
 import TrackSearchResult from "./TrackSearchResult";
 import AlbumSearchResult from "./AlbumSearchResult";
+import PlaylistSearchResult from "./PlaylistSearchResult";
 import Player from "./Player";
 import axios from "axios";
 
@@ -128,6 +129,29 @@ export default function Dashboard({ code }) {
     clearVotedUsers();
   }
 
+  function choosePlaylist(playlistID, playlistImage, playlistName) {
+    setPlayingAlbum({
+      name: albumName,
+      image: albumImage,
+    });
+    setSearch("");
+    spotifyApi
+      .getPlaylistTracks(playlistID, {
+        limit: 100,
+      })
+      .then((res) => {
+        setAllAlbumTracks(res.body.items);
+        let tracksLeftToPlay = [...res.body.items];
+        shuffleArray(tracksLeftToPlay);
+        let trackToPlayNow = tracksLeftToPlay[0];
+        tracksLeftToPlay.shift(); // remove trackToPlayNow
+        setAlbumTracksLeftToPlay(tracksLeftToPlay);
+        addTracksToPollAndPlayTrack(
+          trackToPlayNow,
+          tracksLeftToPlay.slice(0, 4)
+        );
+      });
+  }
   function chooseAlbum(albumID, albumImage, albumName) {
     setPlayingAlbum({
       name: albumName,
@@ -216,7 +240,26 @@ export default function Dashboard({ code }) {
         })
         .then((res) => {
           if (cancel) return;
-          console.log(res);
+          setSearchResults(
+            res.body.items.map((playlist) => {
+              const smallestPlaylistImage = playlist.images.reduce(
+                (smallest, image) => {
+                  if (image.height < smallest.height) return image;
+                  return smallest;
+                },
+                playlist.images[0]
+              );
+              return {
+                title: playlist.name,
+                uri: playlist.uri,
+                spotifyUri: playlist.external_urls.spotify,
+                playlistImage: smallestPlaylistImage.url,
+                totalTracks: playlist.tracks.total,
+                id: playlist.id,
+                artists: "",
+              };
+            })
+          );
         });
     };
 
@@ -252,13 +295,21 @@ export default function Dashboard({ code }) {
       </div>
 
       <div className="flex-grow-1 my-2" style={{ overflowY: "auto" }}>
-        {searchResults.map((album) => (
-          <AlbumSearchResult
-            album={album}
-            chooseAlbum={chooseAlbum}
-            key={album.uri}
-          />
-        ))}
+        {searchPlaylists
+          ? searchResults.map((playlist) => (
+              <PlaylistSearchResult
+                playlist={playlist}
+                choosePlaylist={choosePlaylist}
+                key={playlist.uri}
+              />
+            ))
+          : searchResults.map((album) => (
+              <AlbumSearchResult
+                album={album}
+                chooseAlbum={chooseAlbum}
+                key={album.uri}
+              />
+            ))}
         {searchResults.length === 0 && (
           <div className="text-center" style={{ whiteSpace: "pre" }}>
             {}
