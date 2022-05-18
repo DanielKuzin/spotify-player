@@ -35,6 +35,7 @@ export default function Player({
       syncExternalDevice
       autoPlay
       magnifySliderOnHover
+      syncExternalDeviceInterval={5}
     ></SpotifyPlayer>
   );
 }
