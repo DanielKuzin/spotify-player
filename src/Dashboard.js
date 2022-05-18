@@ -119,12 +119,12 @@ export default function Dashboard({ code }) {
     );
     if (tracksLeftToPlay.length < 4) {
       tracksLeftToPlay = [
-        ...allAlbumTracks.filter((track) => track.name !== nextTrack.name),
+        ...allAlbumTracks.filter((track) => track.name !== trackToPlay.name),
       ];
     }
     shuffleArray(tracksLeftToPlay);
     setAlbumTracksLeftToPlay(tracksLeftToPlay);
-    addTracksToPollAndPlayTrack(nextTrack, tracksLeftToPlay.slice(0, 4));
+    addTracksToPollAndPlayTrack(trackToPlay, tracksLeftToPlay.slice(0, 4));
   }
 
   function addTracksToPollAndPlayTrack(trackToPlay, tracksToAddToPoll) {
