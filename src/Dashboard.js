@@ -111,21 +111,20 @@ export default function Dashboard({ code }) {
     );
   }
 
-  function chooseTrack(track) {
-    setPlayingTrack(track);
-    axios
-      .put("https://627b91cfb54fe6ee008a6235.mockapi.io/data/1", {
-        playingSongName: track.name,
-        playingSongArtist: track.artists[0].name,
-      })
-      .then(
-        (response) => {
-          // console.log(response);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+  function chooseTrack(trackToPlay) {
+    let tracksLeftToPlay = albumTracksLeftToPlay;
+    // remove next song
+    tracksLeftToPlay = tracksLeftToPlay.filter(
+      (track) => track.name !== trackToPlay.name
+    );
+    if (tracksLeftToPlay.length < 4) {
+      tracksLeftToPlay = [
+        ...allAlbumTracks.filter((track) => track.name !== nextTrack.name),
+      ];
+    }
+    shuffleArray(tracksLeftToPlay);
+    setAlbumTracksLeftToPlay(tracksLeftToPlay);
+    addTracksToPollAndPlayTrack(nextTrack, tracksLeftToPlay.slice(0, 4));
   }
 
   function addTracksToPollAndPlayTrack(trackToPlay, tracksToAddToPoll) {
