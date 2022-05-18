@@ -22,6 +22,7 @@ export default function Dashboard({ code }) {
   const [albumTracksLeftToPlay, setAlbumTracksLeftToPlay] = useState([]);
   const [playingTrack, setPlayingTrack] = useState();
   const [playingAlbum, setPlayingAlbum] = useState();
+  const [searchPlaylists, setSearchPlaylists] = useState(false);
 
   function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
@@ -34,6 +35,10 @@ export default function Dashboard({ code }) {
 
   function clearVotedUsers() {
     axios.delete(serverUrl + "/voted");
+  }
+
+  function handleClick() {
+    setSearchPlaylists(!searchPlaylists);
   }
 
   function chooseNextTrackFromPoll() {
@@ -129,7 +134,6 @@ export default function Dashboard({ code }) {
       image: albumImage,
     });
     setSearch("");
-
     spotifyApi
       .getAlbumTracks(albumID, {
         limit: 50,
@@ -204,12 +208,28 @@ export default function Dashboard({ code }) {
         );
       });
     };
+
+    const searchUserPlaylists = (cancel) => {
+      spotifyApi
+        .getUserPlaylists({
+          limit: 50,
+        })
+        .then((res) => {
+          if (cancel) return;
+          console.log(res);
+        });
+    };
+
     if (!search) return setSearchResults([]);
     if (!accessToken) return;
     let cancel = false;
-    searchAlbums(cancel);
+    if (searchPlaylists) {
+      searchUserPlaylists(cancel);
+    } else {
+      searchAlbums(cancel);
+    }
     return () => (cancel = true);
-  }, [search, accessToken]);
+  }, [search, accessToken, searchPlaylists]);
 
   return (
     <Container
@@ -219,12 +239,18 @@ export default function Dashboard({ code }) {
         backgroundImage: `url("https://i.pinimg.com/564x/13/62/25/1362258d5fa4a20660ab5ede0ce9c0ed.jpg")`,
       }}
     >
-      <Form.Control
-        type="search"
-        placeholder="Search Playlists"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      <div className="d-flex m-2 align-items-center">
+        <Form.Control
+          type="search"
+          placeholder="Search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <button onClick={handleClick}>
+          {searchPlaylists ? "User Playlists" : "Albums"}
+        </button>
+      </div>
+
       <div className="flex-grow-1 my-2" style={{ overflowY: "auto" }}>
         {searchResults.map((album) => (
           <AlbumSearchResult
