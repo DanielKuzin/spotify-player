@@ -33,7 +33,6 @@ export default function Dashboard({ code }) {
   }
 
   function clearVotedUsers() {
-    console.log("clear");
     axios.delete(serverUrl + "/voted");
   }
 
