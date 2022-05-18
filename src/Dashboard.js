@@ -112,6 +112,9 @@ export default function Dashboard({ code }) {
   }
 
   function chooseTrack(trackToPlay) {
+    if (trackToPlay.name === playingTrack.name) {
+      return;
+    }
     let tracksLeftToPlay = albumTracksLeftToPlay;
     // remove next song
     tracksLeftToPlay = tracksLeftToPlay.filter(
