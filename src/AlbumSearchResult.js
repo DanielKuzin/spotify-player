@@ -17,7 +17,16 @@ export default function AlbumSearchResult({ album, chooseAlbum }) {
       <div className="ms-3">
         <div>{album.title}</div>
         <div className="text-muted">total tracks: {album.totalTracks}</div>
-        <a href={album.spotifyUri}>Open playlist in Spotify</a>
+        <a>
+          Artists:{" "}
+          {album.artists.map((artist) => artist.name).join(", ").length > 50
+            ? album.artists
+                .map((artist) => artist.name)
+                .join(", ")
+                .slice(0, 50)
+                .concat("...")
+            : album.artists.map((artist) => artist.name).join(", ")}
+        </a>
       </div>
     </div>
   );
