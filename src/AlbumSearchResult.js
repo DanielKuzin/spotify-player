@@ -6,7 +6,7 @@ export default function AlbumSearchResult({ album, chooseAlbum }) {
       className="d-flex m-2 align-items-center"
       style={{ cursor: "pointer" }}
       onClick={() => {
-        chooseAlbum(album.id, album.albumImage, album.title);
+        chooseAlbum(album.id, album.albumImage, album.title, album.totalTracks);
       }}
     >
       <img
