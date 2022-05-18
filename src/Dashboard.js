@@ -39,6 +39,7 @@ export default function Dashboard({ code }) {
   }
 
   function handleClick() {
+    setSearchResults([]);
     setSearch("");
     if (!searchPlaylists) {
       spotifyApi
@@ -273,7 +274,7 @@ export default function Dashboard({ code }) {
     if (!search) return setSearchResults([]);
     if (!accessToken) return;
     let cancel = false;
-    if (!searchPlaylists && search !== "") {
+    if (!searchPlaylists) {
       searchAlbums(cancel);
     }
     return () => (cancel = true);
