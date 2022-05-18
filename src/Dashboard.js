@@ -139,19 +139,26 @@ export default function Dashboard({ code }) {
       .getPlaylistTracks(playlistID, {
         limit: 100,
       })
-      .then((res) => {
-        setAllAlbumTracks(res.body.items);
-        let tracksLeftToPlay = [...res.body.items];
-        shuffleArray(tracksLeftToPlay);
-        let trackToPlayNow = tracksLeftToPlay[0];
-        tracksLeftToPlay.shift(); // remove trackToPlayNow
-        setAlbumTracksLeftToPlay(tracksLeftToPlay);
-        addTracksToPollAndPlayTrack(
-          trackToPlayNow,
-          tracksLeftToPlay.slice(0, 4)
-        );
-      });
+      .then(
+        (res) => {
+          console.log(res);
+          setAllAlbumTracks(res.body.items);
+          let tracksLeftToPlay = [...res.body.items];
+          shuffleArray(tracksLeftToPlay);
+          let trackToPlayNow = tracksLeftToPlay[0];
+          tracksLeftToPlay.shift(); // remove trackToPlayNow
+          setAlbumTracksLeftToPlay(tracksLeftToPlay);
+          addTracksToPollAndPlayTrack(
+            trackToPlayNow,
+            tracksLeftToPlay.slice(0, 4)
+          );
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
+
   function chooseAlbum(albumID, albumImage, albumName) {
     setPlayingAlbum({
       name: albumName,
