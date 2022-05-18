@@ -40,6 +40,36 @@ export default function Dashboard({ code }) {
 
   function handleClick() {
     setSearchPlaylists(!searchPlaylists);
+    setSearch("");
+    if (searchPlaylists) {
+      spotifyApi
+        .getUserPlaylists({
+          limit: 50,
+        })
+        .then((res) => {
+          if (cancel) return;
+          setSearchResults(
+            res.body.items.map((playlist) => {
+              const smallestPlaylistImage = playlist.images.reduce(
+                (smallest, image) => {
+                  if (image.height < smallest.height) return image;
+                  return smallest;
+                },
+                playlist.images[0]
+              );
+              return {
+                title: playlist.name,
+                uri: playlist.uri,
+                spotifyUri: playlist.external_urls.spotify,
+                playlistImage: smallestPlaylistImage.url,
+                totalTracks: playlist.tracks.total,
+                id: playlist.id,
+                artists: "",
+              };
+            })
+          );
+        });
+    }
   }
 
   function chooseNextTrackFromPoll() {
@@ -137,13 +167,14 @@ export default function Dashboard({ code }) {
     setSearch("");
     spotifyApi
       .getPlaylistTracks(playlistID, {
-        limit: 100,
+        limit: 200,
       })
       .then(
         (res) => {
           console.log(res);
-          setAllAlbumTracks(res.body.items);
-          let tracksLeftToPlay = [...res.body.items];
+          let tracksRecieved = res.body.items.map((item) => item.track);
+          setAllAlbumTracks(tracksRecieved);
+          let tracksLeftToPlay = [...tracksRecieved];
           shuffleArray(tracksLeftToPlay);
           let trackToPlayNow = tracksLeftToPlay[0];
           tracksLeftToPlay.shift(); // remove trackToPlayNow
@@ -240,42 +271,10 @@ export default function Dashboard({ code }) {
       });
     };
 
-    const searchUserPlaylists = (cancel) => {
-      spotifyApi
-        .getUserPlaylists({
-          limit: 50,
-        })
-        .then((res) => {
-          if (cancel) return;
-          setSearchResults(
-            res.body.items.map((playlist) => {
-              const smallestPlaylistImage = playlist.images.reduce(
-                (smallest, image) => {
-                  if (image.height < smallest.height) return image;
-                  return smallest;
-                },
-                playlist.images[0]
-              );
-              return {
-                title: playlist.name,
-                uri: playlist.uri,
-                spotifyUri: playlist.external_urls.spotify,
-                playlistImage: smallestPlaylistImage.url,
-                totalTracks: playlist.tracks.total,
-                id: playlist.id,
-                artists: "",
-              };
-            })
-          );
-        });
-    };
-
     if (!search) return setSearchResults([]);
     if (!accessToken) return;
     let cancel = false;
-    if (searchPlaylists) {
-      searchUserPlaylists(cancel);
-    } else {
+    if (!searchPlaylists) {
       searchAlbums(cancel);
     }
     return () => (cancel = true);
