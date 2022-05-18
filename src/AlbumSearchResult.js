@@ -6,7 +6,7 @@ export default function AlbumSearchResult({ album, chooseAlbum }) {
       className="d-flex m-2 align-items-center"
       style={{ cursor: "pointer" }}
       onClick={() => {
-        chooseAlbum(album.id, album.albumImage, album.title, album.totalTracks);
+        chooseAlbum(album.id, album.albumImage, album.title);
       }}
     >
       <img
@@ -14,7 +14,7 @@ export default function AlbumSearchResult({ album, chooseAlbum }) {
         style={{ height: "64px", width: "64px" }}
         alt=""
       />
-      <div className="ms-3" Border>
+      <div className="ms-3">
         <div>{album.title}</div>
         <div className="text-muted">total tracks: {album.totalTracks}</div>
         <div>

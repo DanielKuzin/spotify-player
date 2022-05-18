@@ -123,36 +123,29 @@ export default function Dashboard({ code }) {
     clearVotedUsers();
   }
 
-  function chooseAlbum(albumID, albumImage, albumName, albumTotalTracks) {
+  function chooseAlbum(albumID, albumImage, albumName) {
     setPlayingAlbum({
       name: albumName,
       image: albumImage,
     });
     setSearch("");
-    let allTracks = [];
-    let iterations = Math.ceil(albumTotalTracks / 50);
-    for (let i = 0; i < iterations; i++) {
-      spotifyApi
-        .getAlbumTracks(albumID, {
-          limit: 50,
-        })
-        .then((res) => {
-          allTracks = allTracks.concat(res.body.items);
-          console.log("allTracks.length: " + allTracks.length);
-          if (i == iterations - 1) {
-            setAllAlbumTracks(allTracks);
-            let tracksLeftToPlay = [...allTracks];
-            shuffleArray(tracksLeftToPlay);
-            let trackToPlayNow = tracksLeftToPlay[0];
-            tracksLeftToPlay.shift(); // remove trackToPlayNow
-            setAlbumTracksLeftToPlay(tracksLeftToPlay);
-            addTracksToPollAndPlayTrack(
-              trackToPlayNow,
-              tracksLeftToPlay.slice(0, 4)
-            );
-          }
-        });
-    }
+
+    spotifyApi
+      .getAlbumTracks(albumID, {
+        limit: 50,
+      })
+      .then((res) => {
+        setAllAlbumTracks(res.body.items);
+        let tracksLeftToPlay = [...res.body.items];
+        shuffleArray(tracksLeftToPlay);
+        let trackToPlayNow = tracksLeftToPlay[0];
+        tracksLeftToPlay.shift(); // remove trackToPlayNow
+        setAlbumTracksLeftToPlay(tracksLeftToPlay);
+        addTracksToPollAndPlayTrack(
+          trackToPlayNow,
+          tracksLeftToPlay.slice(0, 4)
+        );
+      });
   }
 
   // function searchTracks(cancel) {
