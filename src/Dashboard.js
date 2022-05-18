@@ -167,7 +167,7 @@ export default function Dashboard({ code }) {
     setSearch("");
     spotifyApi
       .getPlaylistTracks(playlistID, {
-        limit: 200,
+        limit: 100,
       })
       .then(
         (res) => {
