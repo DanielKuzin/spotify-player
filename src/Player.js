@@ -5,6 +5,7 @@ export default function Player({
   accessToken,
   trackUri,
   chooseNextTrackFromPoll,
+  clearVotedUsers,
 }) {
   const [play, setPlay] = useState(false);
 
@@ -27,6 +28,7 @@ export default function Player({
           state.isPlaying === false &&
           state.progressMs === 0
         ) {
+          clearVotedUsers();
           chooseNextTrackFromPoll();
         }
       }}

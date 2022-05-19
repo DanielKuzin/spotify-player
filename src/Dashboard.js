@@ -158,7 +158,6 @@ export default function Dashboard({ code }) {
           console.log(error);
         }
       );
-    clearVotedUsers();
   }
 
   function choosePlaylist(playlistID, playlistImage, playlistName) {
@@ -353,6 +352,7 @@ export default function Dashboard({ code }) {
           accessToken={accessToken}
           trackUri={playingTrack?.uri}
           chooseNextTrackFromPoll={chooseNextTrackFromPoll}
+          clearVotedUsers={clearVotedUsers}
         ></Player>
       </div>
     </Container>
