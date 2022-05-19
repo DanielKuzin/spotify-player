@@ -12,9 +12,6 @@ const spotifyApi = new SpotifyWebApi({
   clientId: "1b92d625825c465aa3f2ec73e22162b5",
 });
 
-// const serverUrl = "http://localhost:3001";
-const serverUrl = "https://dans-player-server.lm.r.appspot.com";
-
 export default function Dashboard({ code }) {
   const accessToken = useAuth(code);
   const [search, setSearch] = useState("");
@@ -32,10 +29,6 @@ export default function Dashboard({ code }) {
       array[i] = array[j];
       array[j] = temp;
     }
-  }
-
-  function clearVotedUsers() {
-    axios.delete(serverUrl + "/voted");
   }
 
   function handleSearchPlaylistsToggle() {
@@ -352,7 +345,6 @@ export default function Dashboard({ code }) {
           accessToken={accessToken}
           trackUri={playingTrack?.uri}
           chooseNextTrackFromPoll={chooseNextTrackFromPoll}
-          clearVotedUsers={clearVotedUsers}
         ></Player>
       </div>
     </Container>
