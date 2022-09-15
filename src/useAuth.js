@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 // const serverUrl = "http://localhost:3001";
-const serverUrl = "https://dans-player-server.lm.r.appspot.com";
+const serverUrl = "https://dans-player-server2.lm.r.appspot.com";
 
 export default function useAuth(code) {
   const [accessToken, setAccessToken] = useState();
